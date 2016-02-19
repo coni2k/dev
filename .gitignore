@@ -1,0 +1,13 @@
+# Visual Studio 2015
+.vs/
+
+# Build folders
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.suo
+*.user
+
+# Publish profiles
+*.pubxml
