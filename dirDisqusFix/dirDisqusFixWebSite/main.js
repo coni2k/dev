@@ -5,18 +5,22 @@
      .controller('MainController', function ($scope, $location) {
 
          $scope.disqusShortname = 'wealtheconomy';
-         $scope.disqusId = '';
-         $scope.disqusUrl = '';
+         $scope.disqusId = 'dirDisqusFix' + $location.path().replace(/\//g, '_');
+         $scope.disqusUrl = $location.absUrl().substring(0, $location.absUrl().length - $location.url().length + $location.path().length);
          $scope.disqusLoaded = false; // Boolean
          $scope.disqusLoadedOn = null; // DateTime
 
          $scope.$on('$routeChangeSuccess', function (event, current, previous) {
 
-             // Load related disqus comments
+             // Load related disqus comments when the view changes
              $scope.disqusId = 'dirDisqusFix' + $location.path().replace(/\//g, '_');
              $scope.disqusUrl = $location.absUrl().substring(0, $location.absUrl().length - $location.url().length + $location.path().length);
-             $scope.disqusLoaded = null;
+
+             // Boolean
+             $scope.disqusLoaded = null; // Trying to change the value to null first but still doesn't work
              $scope.disqusLoaded = true;
+
+             // DateTime
              $scope.disqusLoadedOn = new Date();
 
              // Log
@@ -31,8 +35,9 @@
     .config(function ($routeProvider, $locationProvider) {
 
         $routeProvider
-            .when('/default.aspx', { templateUrl: 'home.html' })
-            .when('/default_fixed.aspx', { templateUrl: 'home.html' })
+            .when('/default_boolean.aspx', { templateUrl: 'home.html' })
+            .when('/default_datetime.aspx', { templateUrl: 'home.html' })
+            .when('/default_without.aspx', { templateUrl: 'home.html' })
             .when('/:key', { templateUrl: function ($routeParams) { return $routeParams.key + '.html' }})
             .otherwise({ redirectTo: '/home' });
 

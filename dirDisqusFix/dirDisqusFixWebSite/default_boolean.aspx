@@ -7,11 +7,11 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
-    <script src="dirDisqus.js"></script> <!--Before fix (original version)-->
+    <script src="dirDisqus.js"></script>
     <script src="main.js"></script>
 </head>
 <body ng-app="dirDisqusFix">
-    <h1>Before Fix</h1>
+    <h1>Boolean</h1>
     <div ng-controller="MainController">
         Choose a view:
         <a href="home">Home</a> |

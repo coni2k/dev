@@ -7,11 +7,11 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
-    <script src="dirDisqus_fixed.js"></script> <!--After fix -->
+    <script src="dirDisqus.js"></script>
     <script src="main.js"></script>
 </head>
 <body ng-app="dirDisqusFix">
-    <h1>After Fix</h1>
+    <h1>Without readyToBind</h1>
     <div ng-controller="MainController">
         Choose a view:
         <a href="home">Home</a> |
@@ -24,8 +24,7 @@
             <hr />
             <dir-disqus disqus-shortname="{{ disqusShortname }}"
                         disqus-identifier="{{ disqusId }}"
-                        disqus-url="{{ disqusUrl }}"
-                        ready-to-bind="{{ disqusLoadedOn }}"><!--Uses datetime parameter-->
+                        disqus-url="{{ disqusUrl }}">
             </dir-disqus>
         </div>
     </div>
