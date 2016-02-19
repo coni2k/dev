@@ -20,7 +20,8 @@
              $scope.disqusLoadedOn = new Date();
 
              // Log
-             console.log('disqusId: ' + $scope.disqusId +
+             console.log('main.js' +
+                 ' - disqusId: ' + $scope.disqusId +
                  ' - disqusUrl: ' + $scope.disqusUrl +
                  ' - disqusLoaded: ' + $scope.disqusLoaded +
                  ' - disqusLoadedOn: ' + $scope.disqusLoadedOn);
