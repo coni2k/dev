@@ -1,43 +1,67 @@
 ﻿(function (angular) {
     'use strict';
-    angular.module('dirDisqusFix', ['ngRoute', 'angularUtils.directives.dirDisqus'])
+    angular.module('dirDisqus', ['ngRoute', 'angularUtils.directives.dirDisqus'])
 
-     .controller('MainController', function ($scope, $location) {
+     .controller('MainController', function ($scope, $location, $timeout) {
 
-         $scope.disqusShortname = 'wealtheconomy';
-         $scope.disqusId = 'dirDisqusFix' + $location.path().replace(/\//g, '_');
-         $scope.disqusUrl = $location.absUrl().substring(0, $location.absUrl().length - $location.url().length + $location.path().length);
-         $scope.disqusLoaded = false; // Boolean
-         $scope.disqusLoadedOn = null; // DateTime
+         // Mode: sync | async | routeChange
+         // Set default, if not correct
+         var mode = $location.search().mode;
+         if (mode !== 'sync' && mode !== 'async' && mode !== 'route') {
+             mode = 'sync'; 
+         }
 
+         // Mode text
+         $scope.modeText = '';
+         switch (mode) {
+             case 'sync': $scope.modeText = 'sync - load directly'; break;
+             case 'async': $scope.modeText = 'async - wait 2 sec before loading'; break;
+             case 'route': $scope.modeText = 'route - load on route changes'; break;
+         }
+
+         // Initial settings for disqus
+         $scope.disqusConfig = {
+             disqus_shortname: 'wealtheconomy',
+             disqus_on_ready: function () {
+                 console.log('on ready callback')
+             }
+         };
+
+         // Mode sync
+         if (mode === 'sync') {
+             $scope.disqusConfig.disqus_identifier = getId();
+             $scope.disqusConfig.disqus_url = getUrl();
+         }
+
+         // Mode async
+         if (mode === 'async') {
+             $timeout(function () {
+                 $scope.disqusConfig.disqus_identifier = getId();
+                 $scope.disqusConfig.disqus_url = getUrl();
+             }, 2000);
+         }
+
+         // Mode routeChange
          $scope.$on('$routeChangeSuccess', function (event, current, previous) {
-
-             // Load related disqus comments when the view changes
-             $scope.disqusId = 'dirDisqusFix' + $location.path().replace(/\//g, '_');
-             $scope.disqusUrl = $location.absUrl().substring(0, $location.absUrl().length - $location.url().length + $location.path().length);
-
-             // Boolean
-             $scope.disqusLoaded = null; // Trying to change the value to null first but still doesn't work
-             $scope.disqusLoaded = true;
-
-             // DateTime
-             $scope.disqusLoadedOn = new Date();
-
-             // Log
-             console.log('main.js' +
-                 ' - disqusId: ' + $scope.disqusId +
-                 ' - disqusUrl: ' + $scope.disqusUrl +
-                 ' - disqusLoaded: ' + $scope.disqusLoaded +
-                 ' - disqusLoadedOn: ' + $scope.disqusLoadedOn);
+             if (mode === 'route') {
+                 $scope.disqusConfig.disqus_identifier = getId();
+                 $scope.disqusConfig.disqus_url = getUrl();
+             }
          });
+
+         function getId() {
+             return 'dirDisqusFix' + $location.path().replace(/\//g, '_');
+         }
+
+         function getUrl() {
+             return $location.absUrl().substring(0, $location.absUrl().length - $location.url().length + $location.path().length);
+         }
      })
 
     .config(function ($routeProvider, $locationProvider) {
 
         $routeProvider
-            .when('/default_boolean.aspx', { templateUrl: 'home.html' })
-            .when('/default_datetime.aspx', { templateUrl: 'home.html' })
-            .when('/default_without.aspx', { templateUrl: 'home.html' })
+            .when('/default.aspx', { templateUrl: 'home.html' })
             .when('/:key', { templateUrl: function ($routeParams) { return $routeParams.key + '.html' }})
             .otherwise({ redirectTo: '/home' });
 
